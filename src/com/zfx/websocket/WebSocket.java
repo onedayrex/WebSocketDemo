@@ -14,13 +14,15 @@ import javax.websocket.server.ServerEndpoint;
 import com.zfx.entity.User;
 import com.zfx.service.UserService;
 import net.sf.json.JSONObject;
-/**
- * Created by onedayrex on 2016/1/10.
- */
+
 @ServerEndpoint("/websocket")
 public class WebSocket {
     private static final UserService userService = new UserService();
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");	// 日期格式化
+
+    public WebSocket(){
+        System.out.println("WebSocket对象创建");
+    }
     @OnOpen
     public void open(Session session) {
         // 添加初始化操作
