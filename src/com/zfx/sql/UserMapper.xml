@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfx.dao.UserDao">
+
+    <select id="findByUserName" parameterType="string" resultType="com.zfx.entity.User">
+        SELECT * FROM usertable WHERE username=#{username}
+    </select>
+
+    <select id="findLoginUser" resultType="string">
+        SELECT username FROM usertable WHERE loginstatu = 1
+    </select>
+
+    <update id="userLogined" parameterType="string">
+        UPDATE usertable SET loginstatu = 1 WHERE username = #{username}
+    </update>
+
+    <update id="userLoginout" parameterType="string">
+        UPDATE usertable set loginstatu = 0 WHERE sessionid=#{sessionid}
+     </update>
+
+    <update id="bindsessionid">
+        UPDATE usertable set sessionid=#{sessionid} where username=#{username}
+    </update>
+
+</mapper>

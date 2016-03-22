@@ -1,0 +1,88 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>登录</title>
+  <meta name="renderer" content="webkit">
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="script/cookie_util.js"></script>
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style type="text/css">
+    #bode{
+      width: 300px;
+      height: auto;
+      margin: 10px auto;
+    }
+  </style>
+  <script type="text/javascript">
+    $(function(){
+      $("#login").click(function(){
+        $("#span_username").html("");
+        $("#span_password").html("");
+        var username = $("#input_user").val().trim();
+        var password = $("#input_password").val().trim();
+        if(username==""){
+          //用户名为空，登陆失败
+          $("#span_username").html("用户名为空");
+          return false;
+        }else if(password==""){
+          //密码为空，登陆失败
+          $("#span_password").html("密码为空");
+          return false;
+        }else {
+          $.ajax({
+            url:"login.do",
+            type:"post",
+            data:{"username":username,"password":password},
+            dataType:"json",
+            success:function(result){
+                if(result.statu==0){
+                  addCookie("user",result.object.username,1);
+                  window.location.href = "index.html";
+                }else if(result.statu==1){
+                  //没有此用户
+                  $("#span_username").html("没有此用户");
+                }else if(result.statu==2){
+                  //用户密码错误
+                  $("#span_password").html("用户密码错误");
+                }else if(result.statu==3){
+                  $("#span_username").html(result.msg);
+                }
+            },
+            error:function(){
+              alert("登陆失败");
+            }
+          });
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="am-panel am-panel-primary" id="bode">
+  <div class="am-panel-hd">登录</div>
+  <div class="am-panel-bd">
+    <div class="am-form">
+      <fieldset>
+        <legend>登录</legend>
+        <div class="am-form-group">
+          <label for="input_user">用户名</label>
+          <input type="text" class="" id="input_user" placeholder="输入用户名" name="username">
+          <span id="span_username" style="color: red"></span>
+        </div>
+        <div class="am-form-group">
+          <label for="input_password">密码</label>
+          <input type="password" class="" id="input_password" placeholder="输入密码" name="password">
+          <span id="span_password" style="color: red"></span>
+        </div>
+        <p><button type="button" class="am-btn am-btn-success am-radio" id="login">提交</button></p>
+      </fieldset>
+    </div>
+  </div>
+</div>
+</body>
+</html>
